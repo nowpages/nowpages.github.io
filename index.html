@@ -1374,7 +1374,14 @@ async function publishPage() {
     const result = await res.json();
 
     if (res.ok) {
-      let msg = 'Your page is live at <a href="https://nowpages.github.io/' + data.handle + '" target="_blank">nowpages.github.io/' + data.handle + '</a>';
+      const instantUrl = WORKER_URL + '/page/' + data.handle;
+      const permanentUrl = 'https://nowpages.github.io/' + data.handle;
+
+      let msg = '<strong style="color:var(--text)">Your page is live!</strong>'
+          + '<br><br><a href="' + instantUrl + '" target="_blank" style="font-size:0.9rem">' + instantUrl + '</a>'
+          + '<br><span style="font-size:0.72rem;opacity:0.6;margin-top:0.2rem;display:inline-block">Instant preview — share this right now</span>'
+          + '<br><br><a href="' + permanentUrl + '" target="_blank" style="font-size:0.82rem;opacity:0.8">' + permanentUrl + '</a>'
+          + '<br><span style="font-size:0.72rem;opacity:0.6;margin-top:0.2rem;display:inline-block">Permanent URL — takes ~1 min for GitHub Pages to deploy</span>';
 
       // Show edit token on-screen for NEW pages (no email needed!)
       if (result.editToken) {
@@ -1383,7 +1390,7 @@ async function publishPage() {
             + escapeHTML(result.editToken) + '</code>'
             + '<br><span style="font-size:0.75rem;opacity:0.7;margin-top:0.3rem;display:inline-block">You\'ll need this to edit your page later. Copy it now!</span>';
       } else {
-        msg += '<br><span style="font-size:0.82rem;opacity:0.8">Page updated successfully.</span>';
+        msg += '<br><br><span style="font-size:0.82rem;opacity:0.8">Page updated — changes are instant on the preview link.</span>';
       }
 
       showStatus(status, msg, 'success');

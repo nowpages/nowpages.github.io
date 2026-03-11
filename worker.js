@@ -11,9 +11,10 @@
  * - No email dependency — token shown on-screen at publish time
  *
  * Endpoints:
- *   POST /publish  — Create or update a now page
- *   POST /load     — Load existing page data for editing (requires handle + token)
- *   GET  /manifest — Returns the directory listing
+ *   POST /publish       — Create or update a now page
+ *   POST /load          — Load existing page data for editing (requires handle + token)
+ *   GET  /manifest      — Returns the directory listing
+ *   GET  /page/:handle  — Instantly serves a page from KV (no GitHub Pages delay)
  *
  * Environment variables (Cloudflare dashboard → Settings → Variables):
  *   GITHUB_PAT    — GitHub PAT with repo write access
@@ -76,6 +77,11 @@ export default {
       }
       if (url.pathname === '/manifest' && request.method === 'GET') {
         return await handleManifest(env, corsHeaders);
+      }
+      // Instant page serving from KV — no GitHub Pages delay
+      const pageMatch = url.pathname.match(/^\/page\/([a-z0-9\-]+)\/?$/);
+      if (pageMatch && request.method === 'GET') {
+        return await handleServePage(pageMatch[1], env);
       }
       return jsonResponse({ error: 'Not found' }, 404, corsHeaders);
     } catch (err) {
@@ -152,7 +158,10 @@ async function handlePublish(request, env, corsHeaders, clientIP) {
     handle, displayName, tagline, avatarUrl, theme, focusItems, socials,
   });
 
-  // ── Push to GitHub ──
+  // ── Cache HTML in KV for instant serving ──
+  await env.TOKENS.put(`html:${handle}`, pageHTML);
+
+  // ── Push to GitHub (runs in background — may take 1-2 min to deploy) ──
   const githubResult = await pushToGitHub(env, handle, pageHTML);
   if (!githubResult.ok) {
     return jsonResponse({ error: 'Failed to publish. Please try again.' }, 502, corsHeaders);
@@ -229,6 +238,21 @@ async function handleLoad(request, env, corsHeaders, clientIP) {
       socials: existing.socials || {},
     }
   }, 200, corsHeaders);
+}
+
+// ─── SERVE PAGE (instant, from KV) ───────────────────────
+async function handleServePage(handle, env) {
+  const html = await env.TOKENS.get(`html:${handle}`);
+  if (!html) {
+    return new Response('Page not found', { status: 404, headers: { 'Content-Type': 'text/plain' } });
+  }
+  return new Response(html, {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/html;charset=UTF-8',
+      'Cache-Control': 'public, max-age=60',
+    }
+  });
 }
 
 // ─── MANIFEST ────────────────────────────────────────────
