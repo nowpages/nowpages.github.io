@@ -15,7 +15,7 @@ ALLOWED_ORIGIN = "https://nowpages.github.io"
 
 [[kv_namespaces]]
 binding = "TOKENS"
-id = "your-kv-namespace-id"
+id = "5ad833c0c6be45c8bb112901e2fa92c2"
 # Create with: wrangler kv:namespace create TOKENS
 
 # ─── OG Image Worker (separate worker) ───
