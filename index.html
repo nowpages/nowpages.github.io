@@ -216,6 +216,20 @@ a:hover { color: var(--accent-hover); }
 }
 .hero-cta:hover { background: var(--accent-hover); transform: translateY(-1px); color: var(--bg); }
 
+.hero-edit-btn {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: none;
+  border: 1px solid var(--border);
+  padding: 0.75rem 1.75rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.hero-edit-btn:hover { border-color: var(--accent); color: var(--accent); }
+
 .hero-sub {
   font-size: 0.78rem;
   color: var(--text-muted);
@@ -492,6 +506,26 @@ a:hover { color: var(--accent-hover); }
 .preview-panel {
   position: sticky;
   top: 72px;
+}
+
+.theme-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding: 0.65rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.theme-bar-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  white-space: nowrap;
 }
 
 .preview-chrome {
@@ -805,7 +839,10 @@ a:hover { color: var(--accent-hover); }
     <div class="hero-badge">Free forever</div>
     <h1>What are you<br>doing <em>now</em>?</h1>
     <p>Create a beautiful now page in 60 seconds. Share what you're focused on. The most SEO-friendly about-me page on the internet.</p>
-    <button class="hero-cta" onclick="showEditor()">Create your page &rarr;</button>
+    <div style="display:flex;gap:0.75rem;justify-content:center;align-items:center;flex-wrap:wrap">
+      <button class="hero-cta" onclick="showEditor()">Create your page &rarr;</button>
+      <button class="hero-edit-btn" onclick="openEditModal()">Edit your page</button>
+    </div>
     <p class="hero-sub">No account needed. Free forever.</p>
   </div>
 </section>
@@ -896,9 +933,18 @@ a:hover { color: var(--accent-hover); }
           </div>
         </div>
 
-        <div class="field">
-          <label>Theme</label>
-          <div class="theme-picker">
+        <div class="publish-row">
+          <button class="publish-btn" onclick="publishPage()">Publish your page</button>
+          <button class="download-btn" onclick="downloadHTML()">Download HTML</button>
+        </div>
+        <div class="publish-status" id="publishStatus"></div>
+      </div>
+
+      <!-- PREVIEW -->
+      <div class="preview-panel">
+        <div class="theme-bar">
+          <span class="theme-bar-label">Theme</span>
+          <div class="theme-picker" id="themePickerTop">
             <label class="theme-option">
               <input type="radio" name="theme" value="ink" checked onchange="updatePreview()">
               <span class="theme-swatch"><span class="dot" style="background:#c4b5fd"></span> Ink</span>
@@ -921,16 +967,6 @@ a:hover { color: var(--accent-hover); }
             </label>
           </div>
         </div>
-
-        <div class="publish-row">
-          <button class="publish-btn" onclick="publishPage()">Publish your page</button>
-          <button class="download-btn" onclick="downloadHTML()">Download HTML</button>
-        </div>
-        <div class="publish-status" id="publishStatus"></div>
-      </div>
-
-      <!-- PREVIEW -->
-      <div class="preview-panel">
         <div class="preview-chrome">
           <div class="preview-toolbar">
             <div class="preview-dots"><span></span><span></span><span></span></div>
