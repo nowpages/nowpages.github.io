@@ -1,0 +1,23 @@
+# NowPages — Cloudflare Workers config
+# Deploy: wrangler deploy
+
+# ─── API Worker (publish, load, manifest) ───
+name = "nowpages-api"
+main = "worker.js"
+compatibility_date = "2024-09-01"
+
+[vars]
+GITHUB_OWNER = "nowpages"
+GITHUB_REPO = "nowpages.github.io"
+ALLOWED_ORIGIN = "https://nowpages.github.io"
+# Set the GitHub PAT as a secret (never in plaintext config):
+#   wrangler secret put GITHUB_PAT
+
+[[kv_namespaces]]
+binding = "TOKENS"
+id = "your-kv-namespace-id"
+# Create with: wrangler kv:namespace create TOKENS
+
+# ─── OG Image Worker (separate worker) ───
+# Deploy separately:
+#   wrangler deploy og-worker.js --name nowpages-og

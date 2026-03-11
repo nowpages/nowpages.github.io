@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NowPages — What are you doing now?</title>
+<meta name="description" content="Create a beautiful, SEO-optimized 'now page' in 60 seconds. Free forever. No account needed.">
+<link rel="canonical" href="https://nowpages.github.io">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="NowPages — What are you doing now?">
+<meta property="og:description" content="Create a beautiful, SEO-optimized now page in 60 seconds. Free forever. No account needed.">
+<meta property="og:url" content="https://nowpages.github.io">
+<meta property="og:image" content="https://nowpages-og.workers.dev/og?name=NowPages&tagline=What+are+you+doing+now%3F&theme=dusk">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================
+   VARIABLES
+   ============================================ */
+:root {
+  --bg: #08080a;
+  --surface: #111114;
+  --surface-2: #1a1a1f;
+  --text: #eae8e4;
+  --text-muted: #7a7a80;
+  --accent: #c4b5fd;
+  --accent-hover: #d4c8fd;
+  --accent-dim: rgba(196, 181, 253, 0.08);
+  --border: #222228;
+  --border-hover: #333340;
+  --danger: #f87171;
+  --success: #4ade80;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --max-width: 1100px;
+  --transition: 0.2s ease;
+}
+
+/* ============================================
+   RESET
+   ============================================ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-hover); }
+
+/* ============================================
+   UTILITY
+   ============================================ */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); border: 0;
+}
+
+/* ============================================
+   NAV
+   ============================================ */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(8, 8, 10, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+}
+
+.nav-logo {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.nav-logo span { color: var(--accent); }
+
+.nav-links {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.nav-link {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition);
+}
+.nav-link:hover { color: var(--text); }
+
+.nav-cta {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--bg);
+  background: var(--accent);
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  transition: background var(--transition);
+  margin-left: 0.5rem;
+}
+.nav-cta:hover { background: var(--accent-hover); color: var(--bg); }
+
+/* ============================================
+   HERO
+   ============================================ */
+.hero {
+  text-align: center;
+  padding: 6rem 0 4rem;
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(ellipse, rgba(196, 181, 253, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 1px solid rgba(196, 181, 253, 0.15);
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  margin-bottom: 1.5rem;
+}
+
+.hero-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+.hero h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  max-width: 520px;
+  margin: 0 auto 2rem;
+  line-height: 1.6;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--bg);
+  background: var(--accent);
+  padding: 0.75rem 1.75rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.hero-cta:hover { background: var(--accent-hover); transform: translateY(-1px); color: var(--bg); }
+
+.hero-sub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+}
+
+/* ============================================
+   EDITOR SECTION
+   ============================================ */
+.editor-section {
+  padding: 2rem 0 4rem;
+  display: none;
+}
+
+.editor-section.active {
+  display: block;
+}
+
+.editor-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* Form side */
+.editor-form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+}
+
+.form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.form-title {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.edit-mode-toggle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--border);
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  transition: all var(--transition);
+}
+.edit-mode-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.field {
+  margin-bottom: 1.25rem;
+}
+
+.field label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.4rem;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.8rem;
+  transition: border-color var(--transition);
+  outline: none;
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-color: var(--accent);
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.field-hint {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+  opacity: 0.7;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+/* Focus items */
+.focus-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.focus-item-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.focus-item-row input { flex: 1; }
+
+.remove-focus-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all var(--transition);
+  flex-shrink: 0;
+}
+.remove-focus-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+.add-focus-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--accent);
+  background: none;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  margin-top: 0.25rem;
+}
+.add-focus-btn:hover { border-color: var(--accent); }
+
+/* Theme picker */
+.theme-picker {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.theme-option {
+  position: relative;
+  cursor: pointer;
+}
+
+.theme-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.theme-swatch {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-family: var(--font-body);
+  color: var(--text-muted);
+  transition: all var(--transition);
+}
+
+.theme-swatch .dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.theme-option input:checked + .theme-swatch {
+  border-color: var(--accent);
+  color: var(--text);
+  background: var(--accent-dim);
+}
+
+/* Publish */
+.publish-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 1.75rem;
+}
+
+.publish-btn {
+  flex: 1;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--bg);
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.publish-btn:hover { background: var(--accent-hover); }
+.publish-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.download-btn {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.download-btn:hover { border-color: var(--text-muted); color: var(--text); }
+
+.publish-status {
+  font-size: 0.8rem;
+  margin-top: 0.75rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-sm);
+  display: none;
+}
+.publish-status.success {
+  display: block;
+  color: var(--success);
+  background: rgba(74, 222, 128, 0.08);
+  border: 1px solid rgba(74, 222, 128, 0.2);
+}
+.publish-status.error {
+  display: block;
+  color: var(--danger);
+  background: rgba(248, 113, 113, 0.08);
+  border: 1px solid rgba(248, 113, 113, 0.2);
+}
+
+/* ============================================
+   LIVE PREVIEW PANEL
+   ============================================ */
+.preview-panel {
+  position: sticky;
+  top: 72px;
+}
+
+.preview-chrome {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.preview-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.85rem;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.preview-dots {
+  display: flex;
+  gap: 5px;
+}
+.preview-dots span {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.preview-url {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  background: var(--bg);
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.preview-frame {
+  height: 560px;
+  overflow-y: auto;
+  background: #0a0a0c;
+}
+
+.preview-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ============================================
+   EDIT MODE MODAL
+   ============================================ */
+.edit-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.edit-modal-overlay.active {
+  display: flex;
+}
+
+.edit-modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.edit-modal h3 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.edit-modal p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+.edit-modal .field { margin-bottom: 1rem; }
+
+.edit-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.edit-modal-actions button {
+  flex: 1;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 0.6rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition);
+}
+
+.edit-submit-btn {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+}
+.edit-submit-btn:hover { background: var(--accent-hover); }
+
+.edit-cancel-btn {
+  background: var(--surface-2);
+  color: var(--text-muted);
+  border: 1px solid var(--border) !important;
+}
+.edit-cancel-btn:hover { color: var(--text); }
+
+/* ============================================
+   DIRECTORY / FEED
+   ============================================ */
+.directory-section {
+  padding: 4rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.directory-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.directory-title {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.directory-count {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.directory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.directory-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: all var(--transition);
+  text-decoration: none;
+  color: var(--text);
+}
+
+.directory-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-1px);
+  color: var(--text);
+}
+
+.directory-card img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.directory-card-info h3 {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.directory-card-info p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-top: 0.1rem;
+}
+
+.directory-empty {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* ============================================
+   FEATURES STRIP
+   ============================================ */
+.features {
+  padding: 4rem 0 3rem;
+  border-top: 1px solid var(--border);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.feature {
+  text-align: center;
+}
+
+.feature-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.feature h3 {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.feature p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ============================================
+   SITE FOOTER
+   ============================================ */
+.site-footer {
+  padding: 2rem 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.site-footer p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.site-footer a { color: var(--text-muted); }
+.site-footer a:hover { color: var(--accent); }
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .editor-layout {
+    grid-template-columns: 1fr;
+  }
+  .preview-panel {
+    position: static;
+    order: -1;
+  }
+  .preview-frame {
+    height: 400px;
+  }
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .hero {
+    padding: 4rem 0 3rem;
+  }
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-link { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="/" class="nav-logo">now<span>pages</span></a>
+    <div class="nav-links">
+      <a href="#directory" class="nav-link">Directory</a>
+      <a href="https://sive.rs/now" class="nav-link" target="_blank" rel="noopener">What's a now page?</a>
+      <button class="nav-cta" onclick="showEditor()">Create yours</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero-badge">Free forever</div>
+    <h1>What are you<br>doing <em>now</em>?</h1>
+    <p>Create a beautiful now page in 60 seconds. Share what you're focused on. The most SEO-friendly about-me page on the internet.</p>
+    <button class="hero-cta" onclick="showEditor()">Create your page &rarr;</button>
+    <p class="hero-sub">No account needed. Free forever.</p>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="container">
+    <div class="features-grid">
+      <div class="feature">
+        <div class="feature-icon">&#9889;</div>
+        <h3>Lightning fast</h3>
+        <p>Zero JavaScript. Inline CSS. Single HTML file. Your page loads instantly on any device.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#128270;</div>
+        <h3>SEO powerhouse</h3>
+        <p>Schema.org markup, Open Graph tags, semantic HTML. Rank for your own name on Google.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#127912;</div>
+        <h3>Beautiful themes</h3>
+        <p>Five handcrafted themes with distinctive typography. Not your average template.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDITOR -->
+<section class="editor-section" id="editor-section">
+  <div class="container">
+    <div class="editor-layout">
+
+      <!-- FORM -->
+      <div class="editor-form">
+        <div class="form-header">
+          <h2 class="form-title">Create your page</h2>
+          <button class="edit-mode-toggle" onclick="openEditModal()">Edit existing</button>
+        </div>
+
+        <div class="field">
+          <label for="handle">Handle</label>
+          <input type="text" id="handle" placeholder="vipin" oninput="updatePreview()" autocomplete="off" spellcheck="false">
+          <p class="field-hint">Your URL: nowpages.github.io/<span id="handle-preview">yourname</span></p>
+        </div>
+
+        <div class="field">
+          <label for="displayName">Display name</label>
+          <input type="text" id="displayName" placeholder="Vipin" oninput="updatePreview()">
+        </div>
+
+        <div class="field">
+          <label for="tagline">Tagline</label>
+          <input type="text" id="tagline" placeholder="Building things that matter" oninput="updatePreview()">
+        </div>
+
+        <div class="field">
+          <label for="avatarUrl">Avatar URL</label>
+          <input type="url" id="avatarUrl" placeholder="https://example.com/your-photo.jpg" oninput="updatePreview()">
+          <p class="field-hint">Paste a link to your photo. Leave empty for a generated avatar.</p>
+        </div>
+
+        <div class="field">
+          <label>What I'm focused on now</label>
+          <div class="focus-items" id="focusItems">
+            <div class="focus-item-row">
+              <input type="text" placeholder="Working on something exciting..." oninput="updatePreview()">
+              <button class="remove-focus-btn" onclick="removeFocus(this)" title="Remove">&times;</button>
+            </div>
+            <div class="focus-item-row">
+              <input type="text" placeholder="Learning a new skill..." oninput="updatePreview()">
+              <button class="remove-focus-btn" onclick="removeFocus(this)" title="Remove">&times;</button>
+            </div>
+            <div class="focus-item-row">
+              <input type="text" placeholder="Reading, watching, exploring..." oninput="updatePreview()">
+              <button class="remove-focus-btn" onclick="removeFocus(this)" title="Remove">&times;</button>
+            </div>
+          </div>
+          <button class="add-focus-btn" onclick="addFocus()">+ Add item</button>
+        </div>
+
+        <div class="field">
+          <label>Social links <span style="font-weight:400;opacity:0.5">(optional)</span></label>
+          <div style="display:flex;flex-direction:column;gap:0.5rem">
+            <input type="url" id="socialGithub" placeholder="https://github.com/you" oninput="updatePreview()">
+            <input type="url" id="socialTwitter" placeholder="https://twitter.com/you" oninput="updatePreview()">
+            <input type="url" id="socialLinkedin" placeholder="https://linkedin.com/in/you" oninput="updatePreview()">
+            <input type="url" id="socialWebsite" placeholder="https://yoursite.com" oninput="updatePreview()">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Theme</label>
+          <div class="theme-picker">
+            <label class="theme-option">
+              <input type="radio" name="theme" value="ink" checked onchange="updatePreview()">
+              <span class="theme-swatch"><span class="dot" style="background:#c4b5fd"></span> Ink</span>
+            </label>
+            <label class="theme-option">
+              <input type="radio" name="theme" value="paper" onchange="updatePreview()">
+              <span class="theme-swatch"><span class="dot" style="background:#c45d3e"></span> Paper</span>
+            </label>
+            <label class="theme-option">
+              <input type="radio" name="theme" value="terminal" onchange="updatePreview()">
+              <span class="theme-swatch"><span class="dot" style="background:#33ff33"></span> Terminal</span>
+            </label>
+            <label class="theme-option">
+              <input type="radio" name="theme" value="dusk" onchange="updatePreview()">
+              <span class="theme-swatch"><span class="dot" style="background:#7c6cf0"></span> Dusk</span>
+            </label>
+            <label class="theme-option">
+              <input type="radio" name="theme" value="sunlight" onchange="updatePreview()">
+              <span class="theme-swatch"><span class="dot" style="background:#e8622c"></span> Sunlight</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="publish-row">
+          <button class="publish-btn" onclick="publishPage()">Publish your page</button>
+          <button class="download-btn" onclick="downloadHTML()">Download HTML</button>
+        </div>
+        <div class="publish-status" id="publishStatus"></div>
+      </div>
+
+      <!-- PREVIEW -->
+      <div class="preview-panel">
+        <div class="preview-chrome">
+          <div class="preview-toolbar">
+            <div class="preview-dots"><span></span><span></span><span></span></div>
+            <div class="preview-url" id="previewUrl">nowpages.github.io/yourname</div>
+          </div>
+          <div class="preview-frame">
+            <iframe id="previewIframe" sandbox="allow-same-origin" title="Live preview of your now page"></iframe>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- EDIT MODAL -->
+<div class="edit-modal-overlay" id="editModal">
+  <div class="edit-modal">
+    <h3>Edit your page</h3>
+    <p>Enter your handle and the edit token you received when you first published.</p>
+    <div class="field">
+      <label for="editHandle">Handle</label>
+      <input type="text" id="editHandle" placeholder="yourname">
+    </div>
+    <div class="field">
+      <label for="editToken">Edit token</label>
+      <input type="text" id="editToken" placeholder="Paste your token">
+    </div>
+    <div class="publish-status" id="editStatus"></div>
+    <div class="edit-modal-actions">
+      <button class="edit-cancel-btn" onclick="closeEditModal()">Cancel</button>
+      <button class="edit-submit-btn" onclick="loadExistingPage()">Load page</button>
+    </div>
+  </div>
+</div>
+
+<!-- DIRECTORY -->
+<section class="directory-section" id="directory">
+  <div class="container">
+    <div class="directory-header">
+      <h2 class="directory-title">Recently created</h2>
+      <span class="directory-count" id="directoryCount"></span>
+    </div>
+    <div class="directory-grid" id="directoryGrid">
+      <p class="directory-empty">Pages will appear here as people create them.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <p>NowPages &mdash; inspired by <a href="https://sive.rs/now" target="_blank" rel="noopener">sive.rs/now</a>. Open source on <a href="https://github.com/nowpages/nowpages.github.io" target="_blank" rel="noopener">GitHub</a>.</p>
+  </div>
+</footer>
+
+<script>
+/* ============================================
+   CONFIG
+   ============================================ */
+const WORKER_URL = 'https://nowpages-api.workers.dev'; // Cloudflare Worker endpoint
+
+/* ============================================
+   EDITOR SHOW/HIDE
+   ============================================ */
+function showEditor() {
+  const sec = document.getElementById('editor-section');
+  sec.classList.add('active');
+  sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  setTimeout(updatePreview, 100);
+}
+
+/* ============================================
+   FOCUS ITEMS
+   ============================================ */
+function addFocus() {
+  const container = document.getElementById('focusItems');
+  if (container.children.length >= 7) return;
+  const row = document.createElement('div');
+  row.className = 'focus-item-row';
+  row.innerHTML = '<input type="text" placeholder="Another thing you\'re up to..." oninput="updatePreview()">' +
+    '<button class="remove-focus-btn" onclick="removeFocus(this)" title="Remove">&times;</button>';
+  container.appendChild(row);
+}
+
+function removeFocus(btn) {
+  const container = document.getElementById('focusItems');
+  if (container.children.length <= 1) return;
+  btn.parentElement.remove();
+  updatePreview();
+}
+
+/* ============================================
+   COLLECT FORM DATA
+   ============================================ */
+function getFormData() {
+  const handle = document.getElementById('handle').value.trim().toLowerCase().replace(/[^a-z0-9\-]/g, '');
+  const displayName = document.getElementById('displayName').value.trim();
+  const tagline = document.getElementById('tagline').value.trim();
+  const avatarUrl = document.getElementById('avatarUrl').value.trim();
+  const theme = document.querySelector('input[name="theme"]:checked').value;
+
+  const focusInputs = document.querySelectorAll('#focusItems input');
+  const focusItems = [];
+  focusInputs.forEach(input => {
+    const val = input.value.trim();
+    if (val) focusItems.push(val);
+  });
+
+  const socials = {
+    github: document.getElementById('socialGithub').value.trim(),
+    twitter: document.getElementById('socialTwitter').value.trim(),
+    linkedin: document.getElementById('socialLinkedin').value.trim(),
+    website: document.getElementById('socialWebsite').value.trim(),
+  };
+
+  return { handle, displayName, tagline, avatarUrl, theme, focusItems, socials };
+}
+
+/* ============================================
+   HANDLE PREVIEW TEXT
+   ============================================ */
+document.getElementById('handle').addEventListener('input', function() {
+  const clean = this.value.toLowerCase().replace(/[^a-z0-9\-]/g, '');
+  document.getElementById('handle-preview').textContent = clean || 'yourname';
+  document.getElementById('previewUrl').textContent = 'nowpages.github.io/' + (clean || 'yourname');
+});
+
+/* ============================================
+   GENERATE HTML
+   ============================================ */
+function generatePageHTML(data) {
+  const {handle, displayName, tagline, avatarUrl, theme, focusItems, socials} = data;
+  const name = displayName || 'Anonymous';
+  const tag = tagline || '';
+  const avatar = avatarUrl || 'https://api.dicebear.com/7.x/notionists/svg?seed=' + (handle || 'anon');
+  const url = 'https://nowpages.github.io/' + (handle || 'anon');
+  const desc = tag + (focusItems.length ? ' — Currently focused on ' + focusItems[0] : '');
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const isoDate = today.toISOString().split('T')[0];
+  const themeAttr = theme === 'ink' ? '' : ' data-theme="' + theme + '"';
+
+  const sameAs = [];
+  if (socials.github) sameAs.push('"' + socials.github + '"');
+  if (socials.twitter) sameAs.push('"' + socials.twitter + '"');
+  if (socials.linkedin) sameAs.push('"' + socials.linkedin + '"');
+  if (socials.website) sameAs.push('"' + socials.website + '"');
+
+  const focusHTML = focusItems.map(item =>
+    '      <li class="now-item">' + escapeHTML(item) + '</li>'
+  ).join('\n');
+
+  const knowsAbout = focusItems.map(item => '"' + escapeHTML(item) + '"').join(', ');
+
+  let socialsHTML = '';
+  if (socials.github) {
+    socialsHTML += '      <a class="social-link" href="' + escapeHTML(socials.github) + '" rel="noopener noreferrer" target="_blank"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>GitHub</a>\n';
+  }
+  if (socials.twitter) {
+    socialsHTML += '      <a class="social-link" href="' + escapeHTML(socials.twitter) + '" rel="noopener noreferrer" target="_blank"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>X / Twitter</a>\n';
+  }
+  if (socials.linkedin) {
+    socialsHTML += '      <a class="social-link" href="' + escapeHTML(socials.linkedin) + '" rel="noopener noreferrer" target="_blank"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</a>\n';
+  }
+  if (socials.website) {
+    socialsHTML += '      <a class="social-link" href="' + escapeHTML(socials.website) + '" rel="noopener noreferrer" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>Website</a>\n';
+  }
+
+  const socialSection = socialsHTML ? `
+  <hr class="divider" aria-hidden="true">
+
+  <section aria-label="Social links">
+    <p class="section-label">Find me</p>
+    <nav class="socials">
+${socialsHTML}    </nav>
+  </section>` : '';
+
+  return `<!DOCTYPE html>
+<html lang="en"${themeAttr}>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${escapeHTML(name)} — Now Page</title>
+<meta name="description" content="${escapeHTML(desc)}">
+<link rel="canonical" href="${url}">
+
+<meta property="og:type" content="profile">
+<meta property="og:title" content="${escapeHTML(name)} — Now Page">
+<meta property="og:description" content="${escapeHTML(desc)}">
+<meta property="og:url" content="${url}">
+<meta property="og:image" content="https://nowpages-og.workers.dev/og?name=${encodeURIComponent(name)}&tagline=${encodeURIComponent(tag)}&theme=${theme}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="NowPages">
+<meta property="profile:username" content="${escapeHTML(handle)}">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${escapeHTML(name)} — Now Page">
+<meta name="twitter:description" content="${escapeHTML(desc)}">
+<meta name="twitter:image" content="https://nowpages-og.workers.dev/og?name=${encodeURIComponent(name)}&tagline=${encodeURIComponent(tag)}&theme=${theme}">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "${escapeHTML(name)}",
+  "description": "${escapeHTML(tag)}",
+  "url": "${url}",
+  "sameAs": [${sameAs.join(', ')}],
+  "image": "${escapeHTML(avatar)}",
+  "knowsAbout": [${knowsAbout}]
+}
+<\/script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #0a0a0c;
+  --surface: #141418;
+  --text: #e8e6e3;
+  --text-muted: #8a8a8e;
+  --accent: #c4b5fd;
+  --accent-dim: rgba(196, 181, 253, 0.12);
+  --border: #2a2a30;
+  --font-body: 'JetBrains Mono', 'SF Mono', monospace;
+  --font-heading: 'JetBrains Mono', 'SF Mono', monospace;
+  --radius: 8px;
+  --max-width: 640px;
+}
+[data-theme="paper"] {
+  --bg: #faf7f2; --surface: #f0ece4; --text: #2c2a28; --text-muted: #7a7570;
+  --accent: #c45d3e; --accent-dim: rgba(196, 93, 62, 0.08); --border: #e0dbd3;
+  --font-body: 'Source Serif 4', Georgia, serif; --font-heading: 'Lora', Georgia, serif;
+}
+[data-theme="terminal"] {
+  --bg: #0c0c0c; --surface: #111111; --text: #33ff33; --text-muted: #1a9a1a;
+  --accent: #33ff33; --accent-dim: rgba(51, 255, 51, 0.06); --border: #1a3a1a;
+  --font-body: 'JetBrains Mono', 'Courier New', monospace; --font-heading: 'JetBrains Mono', 'Courier New', monospace;
+}
+[data-theme="dusk"] {
+  --bg: #0f0e1a; --surface: #1a1830; --text: #e4e2f0; --text-muted: #8884a8;
+  --accent: #7c6cf0; --accent-dim: rgba(124, 108, 240, 0.1); --border: #2a2845;
+  --font-body: 'IBM Plex Sans', 'Helvetica Neue', sans-serif; --font-heading: 'Space Grotesk', 'Helvetica Neue', sans-serif;
+}
+[data-theme="sunlight"] {
+  --bg: #ffffff; --surface: #f8f8f8; --text: #1a1a1a; --text-muted: #6b6b6b;
+  --accent: #e8622c; --accent-dim: rgba(232, 98, 44, 0.08); --border: #ebebeb;
+  --font-body: 'Inter', 'Helvetica Neue', system-ui, sans-serif; --font-heading: 'Space Grotesk', 'Helvetica Neue', sans-serif;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.7; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 0 1.25rem; }
+[data-theme="terminal"] body::before { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px); pointer-events: none; z-index: 100; }
+[data-theme="dusk"] body { background: linear-gradient(160deg, #0f0e1a 0%, #1a1040 50%, #0f0e1a 100%); background-attachment: fixed; }
+a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+a:hover { opacity: 0.8; }
+.page { width: 100%; max-width: var(--max-width); padding: 4rem 0 3rem; }
+.identity { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 2rem; }
+.avatar { width: 72px; height: 72px; border-radius: 50%; border: 2px solid var(--border); object-fit: cover; flex-shrink: 0; background: var(--surface); }
+.identity-text { min-width: 0; }
+.name { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; line-height: 1.3; letter-spacing: -0.02em; }
+[data-theme="terminal"] .name::before { content: '> '; color: var(--accent); }
+.tagline { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.15rem; }
+.divider { border: none; height: 1px; background: var(--border); margin: 1.75rem 0; }
+.section-label { font-family: var(--font-heading); font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); margin-bottom: 1rem; }
+[data-theme="terminal"] .section-label::before { content: '$ '; color: var(--accent); }
+.now-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+.now-item { padding: 0.85rem 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); font-size: 0.92rem; line-height: 1.55; position: relative; }
+.now-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent); border-radius: var(--radius) 0 0 var(--radius); opacity: 0.5; }
+[data-theme="terminal"] .now-item { background: transparent; border-color: var(--border); border-radius: 0; }
+[data-theme="terminal"] .now-item::before { display: none; }
+[data-theme="paper"] .now-item { background: transparent; border: none; border-bottom: 1px solid var(--border); border-radius: 0; padding: 0.85rem 0.5rem; }
+[data-theme="paper"] .now-item::before { display: none; }
+.socials { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
+.social-link { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.8rem; background: var(--accent-dim); border: 1px solid transparent; border-radius: 999px; font-size: 0.78rem; font-family: var(--font-body); color: var(--accent); transition: all 0.2s; }
+.social-link:hover { border-color: var(--accent); opacity: 1; }
+.social-link svg { width: 14px; height: 14px; flex-shrink: 0; }
+[data-theme="terminal"] .social-link { background: transparent; border: 1px solid var(--border); border-radius: 0; color: var(--text); }
+[data-theme="terminal"] .social-link:hover { border-color: var(--accent); color: var(--accent); }
+.page-footer { margin-top: auto; padding: 2rem 0; text-align: center; width: 100%; max-width: var(--max-width); }
+.updated { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+[data-theme="terminal"] .updated::before { content: '// '; }
+.made-with { font-size: 0.72rem; color: var(--text-muted); opacity: 0.6; }
+.made-with a { color: var(--text-muted); border-bottom: 1px solid var(--border); }
+.made-with a:hover { color: var(--accent); border-color: var(--accent); opacity: 1; }
+@media (max-width: 480px) {
+  .page { padding: 2.5rem 0 2rem; }
+  .identity { gap: 1rem; }
+  .avatar { width: 56px; height: 56px; }
+  .name { font-size: 1.25rem; }
+  .now-item { font-size: 0.88rem; padding: 0.75rem 0.85rem; }
+}
+</style>
+</head>
+<body>
+<article class="page" role="main">
+  <header class="identity">
+    <img class="avatar" src="${escapeHTML(avatar)}" alt="${escapeHTML(name)}" width="72" height="72" loading="eager">
+    <div class="identity-text">
+      <h1 class="name">${escapeHTML(name)}</h1>
+      ${tag ? '<p class="tagline">' + escapeHTML(tag) + '</p>' : ''}
+    </div>
+  </header>
+
+  <hr class="divider" aria-hidden="true">
+
+  <section aria-labelledby="now-heading">
+    <p class="section-label" id="now-heading">What I'm focused on now</p>
+    <ul class="now-list">
+${focusHTML}
+    </ul>
+  </section>
+${socialSection}
+</article>
+
+<footer class="page-footer">
+  <p class="updated"><time datetime="${isoDate}">Last updated ${dateStr}</time></p>
+  <p class="made-with">Made with <a href="https://nowpages.github.io">NowPages</a> — create yours free</p>
+</footer>
+</body>
+</html>`;
+}
+
+function escapeHTML(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+/* ============================================
+   LIVE PREVIEW
+   ============================================ */
+let previewTimeout;
+function updatePreview() {
+  clearTimeout(previewTimeout);
+  previewTimeout = setTimeout(() => {
+    const data = getFormData();
+    const html = generatePageHTML(data);
+    const iframe = document.getElementById('previewIframe');
+    iframe.srcdoc = html;
+  }, 150);
+}
+
+/* ============================================
+   DOWNLOAD HTML
+   ============================================ */
+function downloadHTML() {
+  const data = getFormData();
+  if (!data.handle) { alert('Please enter a handle first.'); return; }
+  const html = generatePageHTML(data);
+  const blob = new Blob([html], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'index.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+/* ============================================
+   PUBLISH (via Cloudflare Worker)
+   Sends STRUCTURED DATA only — the worker
+   generates HTML server-side to prevent XSS.
+   ============================================ */
+async function publishPage() {
+  const data = getFormData();
+  const status = document.getElementById('publishStatus');
+
+  // Validation
+  if (!data.handle) { showStatus(status, 'Please enter a handle.', 'error'); return; }
+  if (data.handle.length < 2) { showStatus(status, 'Handle must be at least 2 characters.', 'error'); return; }
+  if (!data.displayName) { showStatus(status, 'Please enter a display name.', 'error'); return; }
+  if (data.focusItems.length === 0) { showStatus(status, 'Add at least one focus item.', 'error'); return; }
+
+  const btn = document.querySelector('.publish-btn');
+  btn.disabled = true;
+  btn.textContent = 'Publishing...';
+
+  try {
+    // Send structured data — NOT raw HTML
+    const payload = {
+      handle: data.handle,
+      displayName: data.displayName,
+      tagline: data.tagline,
+      avatarUrl: data.avatarUrl || '',
+      theme: data.theme,
+      focusItems: data.focusItems,
+      socials: data.socials,
+    };
+
+    // Include edit token if we're editing an existing page
+    if (window._editToken) {
+      payload.editToken = window._editToken;
+    }
+
+    const res = await fetch(WORKER_URL + '/publish', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await res.json();
+
+    if (res.ok) {
+      let msg = 'Your page is live at <a href="https://nowpages.github.io/' + data.handle + '" target="_blank">nowpages.github.io/' + data.handle + '</a>';
+
+      // Show edit token on-screen for NEW pages (no email needed!)
+      if (result.editToken) {
+        msg += '<br><br><strong style="color:var(--text)">Your edit token (save this!):</strong>'
+            + '<br><code style="display:inline-block;margin-top:0.4rem;padding:0.5rem 0.75rem;background:var(--bg);border:1px solid var(--border);border-radius:4px;font-family:var(--font-mono,monospace);font-size:0.82rem;letter-spacing:0.03em;user-select:all;cursor:text;word-break:break-all">'
+            + escapeHTML(result.editToken) + '</code>'
+            + '<br><span style="font-size:0.75rem;opacity:0.7;margin-top:0.3rem;display:inline-block">You\'ll need this to edit your page later. Copy it now!</span>';
+      } else {
+        msg += '<br><span style="font-size:0.82rem;opacity:0.8">Page updated successfully.</span>';
+      }
+
+      showStatus(status, msg, 'success');
+    } else {
+      showStatus(status, result.error || 'Something went wrong. Try again.', 'error');
+    }
+  } catch (err) {
+    showStatus(status, 'Could not connect to the server. Try downloading the HTML instead.', 'error');
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Publish your page';
+}
+
+function showStatus(el, msg, type) {
+  el.className = 'publish-status ' + type;
+  el.innerHTML = msg;
+  el.style.display = 'block';
+}
+
+/* ============================================
+   EDIT MODAL
+   ============================================ */
+function openEditModal() {
+  document.getElementById('editModal').classList.add('active');
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').classList.remove('active');
+  document.getElementById('editStatus').style.display = 'none';
+}
+
+async function loadExistingPage() {
+  const handle = document.getElementById('editHandle').value.trim().toLowerCase().replace(/[^a-z0-9\-]/g, '');
+  const token = document.getElementById('editToken').value.trim();
+  const status = document.getElementById('editStatus');
+
+  if (!handle || !token) {
+    showStatus(status, 'Please enter both your handle and edit token.', 'error');
+    return;
+  }
+
+  try {
+    const res = await fetch(WORKER_URL + '/load', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ handle, token })
+    });
+
+    const result = await res.json();
+
+    if (res.ok && result.data) {
+      // Populate form fields
+      document.getElementById('handle').value = result.data.handle || '';
+      document.getElementById('displayName').value = result.data.displayName || '';
+      document.getElementById('tagline').value = result.data.tagline || '';
+      document.getElementById('avatarUrl').value = result.data.avatarUrl || '';
+
+      // Set theme
+      const themeRadio = document.querySelector('input[name="theme"][value="' + (result.data.theme || 'ink') + '"]');
+      if (themeRadio) themeRadio.checked = true;
+
+      // Populate focus items
+      const container = document.getElementById('focusItems');
+      container.innerHTML = '';
+      (result.data.focusItems || []).forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'focus-item-row';
+        row.innerHTML = '<input type="text" value="' + escapeHTML(item) + '" oninput="updatePreview()">' +
+          '<button class="remove-focus-btn" onclick="removeFocus(this)" title="Remove">&times;</button>';
+        container.appendChild(row);
+      });
+
+      // Populate socials
+      if (result.data.socials) {
+        document.getElementById('socialGithub').value = result.data.socials.github || '';
+        document.getElementById('socialTwitter').value = result.data.socials.twitter || '';
+        document.getElementById('socialLinkedin').value = result.data.socials.linkedin || '';
+        document.getElementById('socialWebsite').value = result.data.socials.website || '';
+      }
+
+      closeEditModal();
+      showEditor();
+      updatePreview();
+
+      // Store token for re-publish
+      window._editToken = token;
+    } else {
+      showStatus(status, result.error || 'Invalid handle or token.', 'error');
+    }
+  } catch (err) {
+    showStatus(status, 'Could not connect to the server.', 'error');
+  }
+}
+
+/* ============================================
+   DIRECTORY (loads from manifest.json)
+   ============================================ */
+async function loadDirectory() {
+  try {
+    const res = await fetch('/manifest.json?t=' + Date.now());
+    if (!res.ok) return;
+    const pages = await res.json();
+
+    const grid = document.getElementById('directoryGrid');
+    const count = document.getElementById('directoryCount');
+
+    if (!pages.length) return;
+
+    count.textContent = pages.length + ' page' + (pages.length === 1 ? '' : 's');
+    grid.innerHTML = '';
+
+    pages.slice(0, 30).forEach(page => {
+      const card = document.createElement('a');
+      card.className = 'directory-card';
+      card.href = '/' + page.handle + '/';
+      card.innerHTML =
+        '<img src="' + escapeHTML(page.avatarUrl || 'https://api.dicebear.com/7.x/notionists/svg?seed=' + page.handle) + '" alt="" width="40" height="40" loading="lazy">' +
+        '<div class="directory-card-info"><h3>' + escapeHTML(page.displayName || page.handle) + '</h3>' +
+        (page.tagline ? '<p>' + escapeHTML(page.tagline) + '</p>' : '') +
+        '</div>';
+      grid.appendChild(card);
+    });
+  } catch (e) {
+    // Manifest doesn't exist yet — that's fine
+  }
+}
+
+/* ============================================
+   INIT
+   ============================================ */
+loadDirectory();
+
+// Check for #create hash
+if (window.location.hash === '#create') {
+  showEditor();
+}
+</script>
+
+</body>
+</html>
