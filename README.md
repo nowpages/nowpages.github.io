@@ -1,90 +1,63 @@
 # NowPages
 
-> What are you doing now?
+> What are you doing *now*?
 
-A free, beautiful "now page" generator inspired by [sive.rs/now](https://sive.rs/now). Users fill out a form, get a stunning static HTML page hosted for free on GitHub Pages.
+A free "now page" generator inspired by [Derek Sivers' /now movement](https://sive.rs/now). Fill out a simple form, pick a theme, and get a beautiful page hosted forever — no sign-up, no accounts, no cost.
 
 **Live:** [nowpages.github.io](https://nowpages.github.io)
 
 ---
 
-## Architecture
+## What's a Now Page?
+
+A now page is like an "about" page, but for what you're focused on *right now* — your current projects, interests, and priorities. Hundreds of people have one (see [nownownow.com](https://nownownow.com)), but most require setting up hosting and writing HTML yourself.
+
+NowPages removes all of that. You fill out a form, hit publish, and your page is live.
+
+## Features
+
+**5 handcrafted themes** — Ink, Paper, Terminal, Dusk, and Sunlight, each with distinctive typography and personality.
+
+**Instant publishing** — your page is live in seconds, no waiting for deploys.
+
+**Full SEO** — every page ships with JSON-LD schema, Open Graph tags, Twitter Cards, and a dynamic social preview image. Share your link anywhere and it looks great.
+
+**No accounts** — you get an edit token when you publish. Save it, and you can update your page anytime.
+
+**Zero cost** — the entire stack runs on GitHub Pages and Cloudflare Workers free tiers. No databases, no servers.
+
+**Zero JavaScript on generated pages** — your now page is pure HTML and CSS. It loads fast everywhere.
+
+## Quick Start
+
+1. Go to [nowpages.github.io](https://nowpages.github.io)
+2. Pick a handle (this becomes your URL)
+3. Fill in your name, tagline, and what you're focused on
+4. Choose a theme
+5. Hit **Publish**
+6. Save your edit token — it's how you update your page later
+
+Your page lives at `nowpages.github.io/your-handle`.
+
+## Self-Hosting
+
+Want to run your own instance? The setup takes about 10 minutes. You'll need a GitHub account and a free Cloudflare account.
+
+See the [Architecture Guide](ARCHITECTURE.md) for how the system works, and the [Maintenance Guide](MAINTENANCE.md) for setup steps, PAT rotation, troubleshooting, and ongoing upkeep.
+
+### Repo Structure
 
 ```
-User → Landing page (index.html on GitHub Pages)
-     → Fills out form
-     → Clicks "Publish"
-     → POST to Cloudflare Worker (nowpages-api)
-     → Worker generates HTML + pushes to GitHub via API
-     → Page live at nowpages.github.io/{handle}
-     → Edit token emailed to user
-```
-
-### Repo structure
-
-```
-/
-├── index.html          ← Landing page + editor (the product)
-├── manifest.json       ← Auto-generated directory of all pages
-├── worker.js           ← Cloudflare Worker: publish, edit, manifest
-├── og-worker.js        ← Cloudflare Worker: dynamic OG images
-├── wrangler.toml       ← Cloudflare config
-├── vipin/
-│   └── index.html      ← Example now page
+├── index.html        Landing page + editor
+├── worker.js         Cloudflare Worker (publish, edit, serve)
+├── og-worker.js      Cloudflare Worker (dynamic OG images)
+├── wrangler.toml     Cloudflare config
+├── manifest.json     Auto-generated directory of all pages
 └── {handle}/
-    └── index.html      ← Each user's now page
+    └── index.html    Each user's generated now page
 ```
-
-## Setup Guide
-
-### 1. GitHub Repo + Pages
-
-1. Create a GitHub organization (e.g., `nowpages`)
-2. Create a public repo named `nowpages.github.io`
-3. Go to **Settings → Pages** → Source: **Deploy from branch** → Branch: `main`, folder: `/ (root)`
-4. Push this code to the repo
-5. Create a **Personal Access Token** (classic) with `repo` scope at [github.com/settings/tokens](https://github.com/settings/tokens)
-
-### 2. Cloudflare Workers
-
-1. Install Wrangler: `npm install -g wrangler`
-2. Login: `wrangler login`
-3. Create KV namespace:
-   ```bash
-   wrangler kv:namespace create TOKENS
-   ```
-4. Copy the namespace ID into `wrangler.toml`
-5. Set secrets:
-   ```bash
-   wrangler secret put GITHUB_PAT
-   wrangler secret put MAILGUN_API_KEY    # optional: for edit token emails
-   wrangler secret put MAILGUN_DOMAIN     # optional
-   ```
-6. Deploy the API worker:
-   ```bash
-   wrangler deploy
-   ```
-7. Deploy the OG image worker:
-   ```bash
-   wrangler deploy og-worker.js --name nowpages-og
-   ```
-
-### 3. Update the landing page
-
-In `index.html`, update the `WORKER_URL` constant to your deployed worker URL:
-```javascript
-const WORKER_URL = 'https://nowpages-api.{your-subdomain}.workers.dev';
-```
-
-### 4. Email setup (optional but recommended)
-
-For sending edit tokens, set up [Mailgun](https://www.mailgun.com/) (free for 5k emails/month) or swap the email function in `worker.js` for Resend, SendGrid, or any transactional email service.
-
-Without email configured, edit tokens are logged to the worker console (viewable in Cloudflare dashboard → Workers → Logs).
 
 ## Themes
-
-Five built-in themes, each with distinctive typography:
 
 | Theme | Vibe | Fonts |
 |-------|------|-------|
@@ -94,31 +67,11 @@ Five built-in themes, each with distinctive typography:
 | **Dusk** | Dark navy/purple, modern | IBM Plex Sans + Space Grotesk |
 | **Sunlight** | Clean, bright, friendly | Inter + Space Grotesk |
 
-## How editing works
+## Documentation
 
-1. User publishes → random edit token generated → emailed to them
-2. To edit: click "Edit existing" → enter handle + token
-3. Worker verifies token against Cloudflare KV
-4. If valid, loads their page data into the editor
-5. User makes changes, clicks "Publish" again (token passed along)
-6. Worker updates the file on GitHub
-
-No accounts. No passwords. No OAuth. Just a token in your inbox.
-
-## SEO features
-
-Every generated page includes:
-
-- Semantic HTML5 (`<article>`, `<header>`, `<section>`, `<footer>`)
-- `<title>` and `<meta description>` auto-generated
-- Canonical URL
-- JSON-LD `Person` schema with `knowsAbout`
-- Open Graph tags (title, description, image, url, type=profile)
-- Twitter Card tags (summary_large_image)
-- Dynamic OG image via worker endpoint
-- Zero JavaScript — pure HTML/CSS
-- Internal linking via directory + "Made with NowPages" footer
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** — system design, request flows, data model, security model
+- **[MAINTENANCE.md](MAINTENANCE.md)** — setup, PAT rotation, troubleshooting, adding themes, handling abuse
 
 ## License
 
-MIT — Built with care by an indie maker.
+MIT
