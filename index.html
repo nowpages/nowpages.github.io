@@ -61,6 +61,20 @@ body {
   color: var(--text);
   line-height: 1.6;
   min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Subtle noise texture */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" seed="2" /%3E%3C/filter%3E%3Crect width="100" height="100" filter="url(%23noise)" opacity="0.02"/%3E%3C/svg%3E');
+  background-repeat: repeat;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.5;
 }
 
 a { color: var(--accent); text-decoration: none; }
@@ -140,63 +154,54 @@ a:hover { color: var(--accent-hover); }
 .nav-cta:hover { background: var(--accent-hover); color: var(--bg); }
 
 /* ============================================
-   HERO
+   HERO (Asymmetric 2-Column Layout)
    ============================================ */
 .hero {
-  text-align: center;
-  padding: 6rem 0 4rem;
+  padding: 4.5rem 0 3rem;
   position: relative;
+  z-index: 2;
 }
 
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 600px;
-  height: 400px;
-  background: radial-gradient(ellipse, rgba(196, 181, 253, 0.06) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.hero-badge {
-  display: inline-flex;
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
   align-items: center;
-  gap: 0.4rem;
-  font-size: 0.72rem;
-  font-family: var(--font-mono);
-  color: var(--accent);
-  background: var(--accent-dim);
-  border: 1px solid rgba(196, 181, 253, 0.15);
-  padding: 0.35rem 0.85rem;
-  border-radius: 999px;
-  margin-bottom: 1.5rem;
 }
 
-.hero-badge::before {
-  content: '';
-  width: 6px; height: 6px;
-  background: var(--accent);
-  border-radius: 50%;
+.hero-content {
+  text-align: left;
 }
 
 .hero h1 {
   font-family: var(--font-heading);
-  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  font-size: clamp(2.5rem, 6vw, 3.8rem);
   font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.035em;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
   margin-bottom: 1rem;
   position: relative;
 }
 
+.hero h1 em {
+  font-style: italic;
+  color: var(--accent);
+  font-weight: 700;
+}
+
 .hero p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--text-muted);
-  max-width: 520px;
-  margin: 0 auto 2rem;
-  line-height: 1.6;
+  max-width: 480px;
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+.hero-cta-group {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .hero-cta {
@@ -233,7 +238,196 @@ a:hover { color: var(--accent-hover); }
 .hero-sub {
   font-size: 0.78rem;
   color: var(--text-muted);
-  margin-top: 0.75rem;
+  margin-top: 1rem;
+}
+
+/* Theme showcase cards (hero right side) */
+.theme-showcase {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.theme-preview {
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.theme-preview:hover {
+  transform: translateX(4px);
+}
+
+.theme-preview-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  min-width: 65px;
+}
+
+.theme-preview-mockup {
+  font-size: 0.72rem;
+  line-height: 1.4;
+  opacity: 0.6;
+  flex: 1;
+}
+
+.theme-preview-sample {
+  font-size: 0.65rem;
+  opacity: 0.4;
+}
+
+/* ============================================
+   HOW IT WORKS SECTION
+   ============================================ */
+.how-it-works {
+  padding: 3rem 0;
+  position: relative;
+  z-index: 2;
+}
+
+.how-it-works-title {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+.steps-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  position: relative;
+  align-items: flex-start;
+}
+
+.step {
+  position: relative;
+  padding-right: 1rem;
+}
+
+.step-number {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 0.75rem;
+}
+
+.step-text {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+/* Connecting line between steps */
+.steps-container::before {
+  content: '';
+  position: absolute;
+  top: 1.5rem;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border) 10%, var(--border) 90%, transparent);
+  z-index: -1;
+}
+
+/* ============================================
+   THEMES SHOWCASE SECTION
+   ============================================ */
+.themes-section {
+  padding: 4rem 0;
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid var(--border);
+}
+
+.themes-header {
+  margin-bottom: 2.5rem;
+}
+
+.themes-title {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.themes-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.themes-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+}
+
+.theme-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition);
+  position: relative;
+}
+
+.theme-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+}
+
+.theme-card.active {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.theme-card-swatch {
+  width: 100%;
+  height: 60px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1rem;
+  border: 1px solid var(--border);
+}
+
+.theme-card-name {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+
+.theme-card-font {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.theme-card-sample {
+  font-size: 0.75rem;
+  padding: 0.5rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ============================================
@@ -242,6 +436,8 @@ a:hover { color: var(--accent-hover); }
 .editor-section {
   padding: 2rem 0 4rem;
   display: none;
+  position: relative;
+  z-index: 2;
 }
 
 .editor-section.active {
@@ -659,6 +855,8 @@ a:hover { color: var(--accent-hover); }
 .directory-section {
   padding: 4rem 0;
   border-top: 1px solid var(--border);
+  position: relative;
+  z-index: 2;
 }
 
 .directory-header {
@@ -736,48 +934,14 @@ a:hover { color: var(--accent-hover); }
 }
 
 /* ============================================
-   FEATURES STRIP
-   ============================================ */
-.features {
-  padding: 4rem 0 3rem;
-  border-top: 1px solid var(--border);
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-}
-
-.feature {
-  text-align: center;
-}
-
-.feature-icon {
-  font-size: 1.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.feature h3 {
-  font-family: var(--font-heading);
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin-bottom: 0.35rem;
-}
-
-.feature p {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  line-height: 1.5;
-}
-
-/* ============================================
    SITE FOOTER
    ============================================ */
 .site-footer {
   padding: 2rem 0;
   border-top: 1px solid var(--border);
   text-align: center;
+  position: relative;
+  z-index: 2;
 }
 
 .site-footer p {
@@ -791,31 +955,94 @@ a:hover { color: var(--accent-hover); }
 /* ============================================
    RESPONSIVE
    ============================================ */
+@media (max-width: 1024px) {
+  .hero-grid {
+    gap: 2rem;
+  }
+
+  .themes-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-grid > :last-child {
+    display: none;
+  }
+
+  .steps-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .steps-container::before {
+    display: none;
+  }
+
+  .step {
+    padding-right: 0;
+  }
+
+  .themes-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
   .editor-layout {
     grid-template-columns: 1fr;
   }
+
   .preview-panel {
     position: static;
     order: -1;
   }
+
   .preview-frame {
     height: 400px;
-  }
-  .features-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-  .hero {
-    padding: 4rem 0 3rem;
-  }
-  .field-row {
-    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 480px) {
   .nav-link { display: none; }
+
+  .hero {
+    padding: 3rem 0 2rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+  }
+
+  .hero p {
+    font-size: 0.9rem;
+  }
+
+  .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-cta,
+  .hero-edit-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .themes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .step-number {
+    font-size: 1.5rem;
+  }
+
+  .step-text {
+    font-size: 0.85rem;
+  }
 }
 </style>
 </head>
@@ -836,35 +1063,108 @@ a:hover { color: var(--accent-hover); }
 <!-- HERO -->
 <section class="hero" id="hero">
   <div class="container">
-    <div class="hero-badge">Free forever</div>
-    <h1>What are you<br>doing <em>now</em>?</h1>
-    <p>Create a beautiful now page in 60 seconds. Share what you're focused on. The most SEO-friendly about-me page on the internet.</p>
-    <div style="display:flex;gap:0.75rem;justify-content:center;align-items:center;flex-wrap:wrap">
-      <button class="hero-cta" onclick="showEditor()">Create your page &rarr;</button>
-      <button class="hero-edit-btn" onclick="openEditModal()">Edit your page</button>
+    <div class="hero-grid">
+      <!-- Left side: content -->
+      <div class="hero-content">
+        <h1>What are you doing <em>now</em>&hairsp;?</h1>
+        <p>Share what matters to you right now. No sign-up, no hosting, no cost. Just a beautiful page in 60 seconds.</p>
+        <div class="hero-cta-group">
+          <button class="hero-cta" onclick="showEditor()">Create your page &rarr;</button>
+          <button class="hero-edit-btn" onclick="openEditModal()">Edit your page</button>
+        </div>
+        <p class="hero-sub">Free forever.</p>
+      </div>
+
+      <!-- Right side: theme showcase with actual theme colors -->
+      <div class="theme-showcase">
+        <div class="theme-preview" style="background:#0a0a0c;border:1px solid #2a2a30;color:#e8e6e3">
+          <div class="theme-preview-name" style="color:#c4b5fd">Ink</div>
+          <div class="theme-preview-mockup" style="color:#8a8a8e">Monospace elegance on dark canvas</div>
+          <div class="theme-preview-sample" style="color:#c4b5fd;font-family:'JetBrains Mono',monospace">alex &bull; building things</div>
+        </div>
+        <div class="theme-preview" style="background:#faf7f2;border:1px solid #e0dbd3;color:#2c2a28">
+          <div class="theme-preview-name" style="color:#c45d3e">Paper</div>
+          <div class="theme-preview-mockup" style="color:#7a7570">Warm serif, editorial feel</div>
+          <div class="theme-preview-sample" style="color:#c45d3e;font-family:'Lora',serif">alex &bull; building things</div>
+        </div>
+        <div class="theme-preview" style="background:#0c0c0c;border:1px solid #1a3a1a;color:#33ff33">
+          <div class="theme-preview-name" style="color:#33ff33">Terminal</div>
+          <div class="theme-preview-mockup" style="color:#1a9a1a">Green phosphor CRT glow</div>
+          <div class="theme-preview-sample" style="color:#33ff33;font-family:'JetBrains Mono',monospace">&gt; alex &bull; building things</div>
+        </div>
+        <div class="theme-preview" style="background:linear-gradient(135deg,#0f0e1a,#1a1040);border:1px solid #2a2845;color:#e4e2f0">
+          <div class="theme-preview-name" style="color:#7c6cf0">Dusk</div>
+          <div class="theme-preview-mockup" style="color:#8884a8">Deep purple twilight</div>
+          <div class="theme-preview-sample" style="color:#7c6cf0;font-family:'IBM Plex Sans',sans-serif">alex &bull; building things</div>
+        </div>
+        <div class="theme-preview" style="background:#ffffff;border:1px solid #ebebeb;color:#1a1a1a">
+          <div class="theme-preview-name" style="color:#e8622c">Sunlight</div>
+          <div class="theme-preview-mockup" style="color:#6b6b6b">Clean, bright, friendly</div>
+          <div class="theme-preview-sample" style="color:#e8622c;font-family:'Inter',sans-serif">alex &bull; building things</div>
+        </div>
+      </div>
     </div>
-    <p class="hero-sub">No account needed. Free forever.</p>
   </div>
 </section>
 
-<!-- FEATURES -->
-<section class="features">
+<!-- HOW IT WORKS -->
+<section class="how-it-works">
   <div class="container">
-    <div class="features-grid">
-      <div class="feature">
-        <div class="feature-icon">&#9889;</div>
-        <h3>Lightning fast</h3>
-        <p>Zero JavaScript. Inline CSS. Single HTML file. Your page loads instantly on any device.</p>
+    <div class="how-it-works-title">How it works</div>
+    <div class="steps-container">
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-text">Pick a handle</div>
       </div>
-      <div class="feature">
-        <div class="feature-icon">&#128270;</div>
-        <h3>SEO powerhouse</h3>
-        <p>Schema.org markup, Open Graph tags, semantic HTML. Rank for your own name on Google.</p>
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-text">Fill in what you're focused on</div>
       </div>
-      <div class="feature">
-        <div class="feature-icon">&#127912;</div>
-        <h3>Beautiful themes</h3>
-        <p>Five handcrafted themes with distinctive typography. Not your average template.</p>
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-text">Hit publish — you're live</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THEMES SHOWCASE -->
+<section class="themes-section">
+  <div class="container">
+    <div class="themes-header">
+      <h2 class="themes-title">Choose your style</h2>
+      <p class="themes-subtitle">Five handcrafted themes with distinctive typography and aesthetics</p>
+    </div>
+    <div class="themes-grid">
+      <div class="theme-card">
+        <div class="theme-card-swatch" style="background:linear-gradient(135deg, #c4b5fd 0%, #7a6dd4 100%)"></div>
+        <div class="theme-card-name">Ink</div>
+        <div class="theme-card-font">JetBrains Mono</div>
+        <div class="theme-card-sample">Monospace elegance</div>
+      </div>
+      <div class="theme-card">
+        <div class="theme-card-swatch" style="background:linear-gradient(135deg, #faf7f2 0%, #c45d3e 100%)"></div>
+        <div class="theme-card-name">Paper</div>
+        <div class="theme-card-font">Lora + Serif</div>
+        <div class="theme-card-sample">Warm & literary</div>
+      </div>
+      <div class="theme-card">
+        <div class="theme-card-swatch" style="background:linear-gradient(135deg, #0c0c0c 0%, #33ff33 100%)"></div>
+        <div class="theme-card-name">Terminal</div>
+        <div class="theme-card-font">Courier</div>
+        <div class="theme-card-sample">Retro computing</div>
+      </div>
+      <div class="theme-card">
+        <div class="theme-card-swatch" style="background:linear-gradient(135deg, #0f0e1a 0%, #7c6cf0 100%)"></div>
+        <div class="theme-card-name">Dusk</div>
+        <div class="theme-card-font">IBM Plex + Space</div>
+        <div class="theme-card-sample">Purple twilight</div>
+      </div>
+      <div class="theme-card">
+        <div class="theme-card-swatch" style="background:linear-gradient(135deg, #ffffff 0%, #e8622c 100%)"></div>
+        <div class="theme-card-name">Sunlight</div>
+        <div class="theme-card-font">Inter + Space</div>
+        <div class="theme-card-sample">Bright & modern</div>
       </div>
     </div>
   </div>
